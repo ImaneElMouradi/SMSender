@@ -28,6 +28,24 @@ const message = "test bulksms ma";
 
 const testUrl = "https://engeknzgmobav.x.pipedream.net/testSMS";
 
+const mongoose = require("mongoose");
+let Candidate = require("./candidates.model");
+
+mongoose.connect(
+  "mongodb://localhost:27017/CandidatesFailSMS",
+  { useNewUrlParser: true },
+  err => {
+    if (err) console.log(err);
+  }
+);
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+
+db.once("open", () => {
+  console.log("Connection successfull to database");
+});
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
@@ -58,6 +76,23 @@ const postCallTest = (res, phoneNum) => {
   );
 };
 
+// fucntion to store candidates depending on the pb (problem) encountered
+saveCandidate = (pb, id, first_name, last_name, res) => {
+  const date = new Date();
+  const candidate = new Candidate({
+    candidateId: id,
+    candidateFirstName: first_name,
+    candidateLastName: last_name,
+    problem: pb,
+    date:
+      date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
+  });
+  candidate.save((err, candidate) => {
+    if (err) return console.error(err);
+    res.send(candidate.candidateId + " saved to the database : " + pb);
+  });
+};
+
 // endpoint
 app.post("/test", (req, res) => {
   //   console.log(req.body);
@@ -73,14 +108,14 @@ app.post("/test", (req, res) => {
     if (phone_numbers) {
       const phoneNum = phone_numbers[0].value; // have to check if the number is valid (format etc)
       if (phoneNum.length != 10 || phoneNum[0] != "0") {
-        res.send("wrong number");
+        saveCandidate("wrong number", id, first_name, last_name, res);
       } else {
         postCallTest(res, phoneNum);
       }
 
       // return res.send("send SMS to " + phoneNum);
     } else {
-      res.send("no phone number");
+      saveCandidate("no phone number", id, first_name, last_name, res);
     }
   }
 });
