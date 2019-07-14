@@ -1,26 +1,83 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    candidates: [],
+    isLoading: false,
+    search: ""
+  };
+
+  fetchApiCandidates = () => {
+    this.setState({ isLoading: true });
+    fetch("http://localhost:3001/api/candidates")
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ candidates: [...data], isLoading: false });
+        // console.log(this.state.candidates);
+      });
+  };
+
+  componentDidMount() {
+    this.fetchApiCandidates();
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <h4 className="navigation">Candidates who didn't receive an SMS</h4>
+        <span>
+          <i className="fa fa-redo" />
+        </span>
+        {this.state.isLoading && (
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border text-danger" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        )}
+        {!this.state.isLoading && (
+          <div>
+            <table className="table table-borderless">
+              <thead className="">
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">First Name</th>
+                  <th scope="col">Last Name</th>
+                  <th scopr="col">Date</th>
+                  <th scope="col">Problem</th>
+                  <th scope="col" />
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.candidates.map(candidate => (
+                  <tr key={candidate._id}>
+                    <th>{candidate.candidateId}</th>
+                    <td>{candidate.candidateFirstName}</td>
+                    <td>{candidate.candidateLastName}</td>
+                    <td>{candidate.date}</td>
+                    <td
+                      className={
+                        candidate.problem === "no phone number"
+                          ? "red"
+                          : "orange"
+                      }
+                    >
+                      {candidate.problem}
+                    </td>
+                    <td>
+                      <span>
+                        <i className="fa fa-trash trash" />
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
 export default App;

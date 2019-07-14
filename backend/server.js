@@ -120,6 +120,13 @@ app.post("/test", (req, res) => {
   }
 });
 
+app.get("/api/candidates", (req, res) => {
+  Candidate.find((err, candidates) => {
+    if (err) consloe.log(err);
+    else res.send(candidates);
+  });
+});
+
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
