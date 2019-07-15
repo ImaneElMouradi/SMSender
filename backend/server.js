@@ -26,7 +26,9 @@ const sender = "itwins"; // you can add in the API /&shortcode=${sender}/
 
 const message = "test bulksms ma";
 
-const testUrl = "https://engeknzgmobav.x.pipedream.net/testSMS";
+const testUrl = "https://en1vvpgtofojg.x.pipedream.ne/testSMS";
+const slackWebhook =
+  "https://hooks.slack.com/services/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";
 
 const mongoose = require("mongoose");
 let Candidate = require("./candidates.model");
@@ -55,7 +57,7 @@ const opts = {
 };
 
 // functions
-const postCallTest = (res, phoneNum) => {
+const postCallTest = (res, phoneNum, id, first_name, last_name) => {
   request(
     {
       url: testUrl,
@@ -71,13 +73,35 @@ const postCallTest = (res, phoneNum) => {
         // console.log("The number of request attempts: " + response.attempts); // works with requestretry but had problem with it...
         res.send("send SMS to " + phoneNum);
       }
-      if (err) return console.log(err);
+      if (err) {
+        console.log(err);
+        saveCandidate("5xx or network err", id, first_name, last_name, res);
+        res.send(err);
+      }
     }
   );
 };
 
+const postSlack = (res, id, first_name, last_name, pb) => {
+  var payload = {
+    text:
+      "Failed to send SMS to " +
+      last_name +
+      " " +
+      first_name +
+      ", problem: " +
+      pb
+  };
+  payload = JSON.stringify(payload);
+
+  request({ url: slackWebhook, body: payload, method: "POST" }, (err, data) => {
+    if (data) console.log(`the message to slack is ${data.body}`);
+    if (err) console.log(err);
+  });
+};
+
 // fucntion to store candidates depending on the pb (problem) encountered
-saveCandidate = (pb, id, first_name, last_name, res) => {
+const saveCandidate = (pb, id, first_name, last_name, res) => {
   const date = new Date();
   const candidate = new Candidate({
     candidateId: id,
@@ -89,6 +113,7 @@ saveCandidate = (pb, id, first_name, last_name, res) => {
   });
   candidate.save((err, candidate) => {
     if (err) return console.error(err);
+    postSlack(res, id, first_name, last_name, pb);
     res.send(candidate.candidateId + " saved to the database : " + pb);
   });
 };

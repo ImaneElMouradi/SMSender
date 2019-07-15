@@ -55,15 +55,18 @@ class App extends Component {
     return (
       <div className="App">
         <h4 className="navigation">Candidates who didn't receive an SMS</h4>
-        <input
-          type="text"
-          value={this.state.search}
-          onChange={this.handleSearch}
-          placeholder="Search Name"
-        />
+        <div className="search-container">
+          <input
+            type="text"
+            value={this.state.search}
+            onChange={this.handleSearch}
+            placeholder="Search Name"
+          />
+        </div>
         <span>
           <i className="fa fa-redo" />
         </span>
+
         {this.state.isLoading && (
           <div className="d-flex justify-content-center">
             <div className="spinner-border text-danger" role="status">
@@ -71,7 +74,8 @@ class App extends Component {
             </div>
           </div>
         )}
-        {!this.state.isLoading && (
+
+        {this.state.candidates && (
           <div>
             <table className="table table-borderless">
               <thead className="">
@@ -84,6 +88,7 @@ class App extends Component {
                   <th scope="col" />
                 </tr>
               </thead>
+
               <tbody>
                 {filteredCandidates.map(candidate => (
                   <tr key={candidate._id}>
