@@ -26,7 +26,7 @@ const sender = "itwins"; // you can add in the API /&shortcode=${sender}/
 
 const message = "test bulksms ma";
 
-const testUrl = "https://en1vvpgtofojg.x.pipedream.ne/testSMS";
+const testUrl = "https://ennn27uyxhe2.x.pipedream.net/testSMS";
 const slackWebhook =
   "https://hooks.slack.com/services/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";
 
@@ -57,7 +57,7 @@ const opts = {
 };
 
 // functions
-const postCallTest = (res, phoneNum, id, first_name, last_name) => {
+const postCallSMS = (res, phoneNum, id, first_name, last_name) => {
   request(
     {
       url: testUrl,
@@ -74,23 +74,34 @@ const postCallTest = (res, phoneNum, id, first_name, last_name) => {
         res.send("send SMS to " + phoneNum);
       }
       if (err) {
-        console.log(err);
-        saveCandidate("5xx or network err", id, first_name, last_name, res);
-        res.send(err);
+        console.log(
+          `sms fail to ${id} ${last_name} ${first_name}, error: ${err}`
+        );
+        saveCandidate("5xx or Network err", id, first_name, last_name, res);
       }
     }
   );
 };
 
-const postSlack = (res, id, first_name, last_name, pb) => {
+module.exports.postCallSMS = postCallSMS;
+
+const postSlack = (id, first_name, last_name, pb) => {
   var payload = {
     text:
-      "Failed to send SMS to " +
-      last_name +
-      " " +
+      "*Failed to send SMS* :persevere:\n" +
+      "*Candidate ID:* " +
+      id +
+      "\n" +
+      "*First Name:* " +
       first_name +
-      ", problem: " +
-      pb
+      "\n" +
+      "*Last Name:* " +
+      last_name +
+      "\n" +
+      "*Problem:* " +
+      pb +
+      "\n" +
+      "--> For more details, please <http://localhost:3000| click here>"
   };
   payload = JSON.stringify(payload);
 
@@ -113,7 +124,7 @@ const saveCandidate = (pb, id, first_name, last_name, res) => {
   });
   candidate.save((err, candidate) => {
     if (err) return console.error(err);
-    postSlack(res, id, first_name, last_name, pb);
+    postSlack(id, first_name, last_name, pb);
     res.send(candidate.candidateId + " saved to the database : " + pb);
   });
 };
@@ -133,14 +144,14 @@ app.post("/test", (req, res) => {
     if (phone_numbers) {
       const phoneNum = phone_numbers[0].value; // have to check if the number is valid (format etc)
       if (phoneNum.length != 10 || phoneNum[0] != "0") {
-        saveCandidate("wrong number", id, first_name, last_name, res);
+        saveCandidate("Wrong number", id, first_name, last_name, res);
       } else {
-        postCallTest(res, phoneNum);
+        postCallSMS(res, phoneNum, id, first_name, last_name);
       }
 
       // return res.send("send SMS to " + phoneNum);
     } else {
-      saveCandidate("no phone number", id, first_name, last_name, res);
+      saveCandidate("No phone number", id, first_name, last_name, res);
     }
   }
 });

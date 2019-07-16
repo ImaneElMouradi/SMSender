@@ -41,6 +41,16 @@ class App extends Component {
     this.setState({ search: e.target.value });
   };
 
+  getColor = e => {
+    if (e == "No phone number") {
+      return "red";
+    } else if (e == "Wrong number") {
+      return "orange";
+    } else {
+      return "blue";
+    }
+  };
+
   render() {
     let filteredCandidates = this.state.candidates.filter(candidate => {
       return (
