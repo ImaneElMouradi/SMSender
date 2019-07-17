@@ -91,11 +91,23 @@ const postCallSMS = (res, phoneNum, id, first_name, last_name) => {
 
 module.exports.postCallSMS = postCallSMS;
 
-// funciton to send a real time message to slack whenever an SMS fails
+// i mean, why not? xd
+const emojis = [
+  ":persevere:",
+  ":face_with_raised_eyebrow:",
+  ":thinking_face:",
+  ":disappointed_relieved:",
+  ":confused:"
+];
+
+// function to send a real time message to slack whenever an SMS fails
 const postSlack = (id, first_name, last_name, pb) => {
+  const randomNum = Math.floor(Math.random() * 4);
   var payload = {
     text:
-      "*Failed to send SMS* :persevere:\n" +
+      "*Failed to send SMS* " +
+      emojis[randomNum] +
+      "\n" +
       "*Candidate ID:* " +
       id +
       "\n" +
@@ -147,6 +159,7 @@ const saveCandidate = (pb, id, first_name, last_name, res) => {
         // updating if candidate exists
         candidate.problem = pb;
         candidate.date = date;
+        postSlack(id, first_name, last_name, pb);
         res.send(
           candidate.candidateId + " saved to the database (update) : " + pb
         );

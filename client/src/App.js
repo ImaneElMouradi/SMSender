@@ -51,6 +51,10 @@ class App extends Component {
     }
   };
 
+  handleRefresh = () => {
+    this.fetchApiCandidates();
+  };
+
   render() {
     let filteredCandidates = this.state.candidates.filter(candidate => {
       return (
@@ -73,9 +77,8 @@ class App extends Component {
             placeholder="Search Name"
           />
         </div>
-        <span>
-          <i className="fa fa-redo" />
-        </span>
+
+        <button onClick={this.handleRefresh}>Refresh</button>
 
         {this.state.isLoading && (
           <div className="d-flex justify-content-center">
