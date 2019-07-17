@@ -2586,3 +2586,155 @@ Connection successfull to database
 the message to slack is ok
 Listening on port 3001...
 Connection successfull to database
+5d28a0b31925a12120067bbf was successfully deleted
+5d28a4aac4665c570c2e66f0 was successfully deleted
+5d28a4c4ee99cf3994e31165 was successfully deleted
+5d2b7e81209c1f5a00285339 was successfully deleted
+5d2c4d6a2a90bd0be4be9e12 was successfully deleted
+5d2c4d9f2a90bd0be4be9e13 was successfully deleted
+5d28a1231dd9d41c28551fbd was successfully deleted
+5d28a169e230ec1cd0a06e45 was successfully deleted
+5d28a16ce230ec1cd0a06e46 was successfully deleted
+5d2c5a6d46f7c93be08baedf was successfully deleted
+5d2c5a8146f7c93be08baee0 was successfully deleted
+5d2c5e49329ec94080dedc2f was successfully deleted
+5d2c5e6479be4126dcd8d221 was successfully deleted
+5d2c5e803c534a3104aecac5 was successfully deleted
+5d2c5f4affb6c025389ddb82 was successfully deleted
+5d2c5f905ddc6d476861758d was successfully deleted
+5d2c7a39c5191632a08a67b0 was successfully deleted
+5d2c7a786177cb4340bb1985 was successfully deleted
+5d2c7c360ab1941380188db9 was successfully deleted
+5d2c7c68ec2147308477abce was successfully deleted
+5d2c7de911a5223fec2f0ee7 was successfully deleted
+5d2c8b1d952bf733a42ed3f9 was successfully deleted
+5d2c8b52712dbd48b0f035b2 was successfully deleted
+5d2c8b9863764709743ab4ec was successfully deleted
+5d2c8bf824c84453407c8940 was successfully deleted
+5d2c8c124f510c25b07636e4 was successfully deleted
+5d2c8c6d5872182754799dc3 was successfully deleted
+5d2da2467447192cd05a3e38 was successfully deleted
+5d2da22d14cdf848302fb87f was successfully deleted
+5d2da28be201283fc4b095b9 was successfully deleted
+5d2da25cf6e8930ebc1eb99d was successfully deleted
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+5d2d9eeb987f111718267312 was successfully deleted
+5d2d9eafa6b31a0948d37665 was successfully deleted
+5d2d9fc40c2ac0354ca36d2d was successfully deleted
+5d2d9f2b4a81ae45b0369a9e was successfully deleted
+5d2c8e3fd4e1a22f205db0b7 was successfully deleted
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+true
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+undefined
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+undefined
+null
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+null
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+8987
+null
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+undefined
+8987
+null
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+undefined
+8987
+null
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+notfound
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+{ _id: 5d28a170e230ec1cd0a06e47,
+  candidateId: 8987,
+  candidateFirstName: 'ipsum',
+  candidateLastName: 'Lorem',
+  problem: 'no phone number',
+  date: '12-7-2019',
+  __v: 0 }
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+undefined
+Connection successfull to database
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+undefined
+the message to slack is ok
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database
+Listening on port 3001...
+Connection successfull to database

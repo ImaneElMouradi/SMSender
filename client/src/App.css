@@ -1,7 +1,7 @@
 .App {
   width: 80%;
   margin: auto;
-  font-family: "Roboto", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .navigation {
@@ -23,6 +23,9 @@
 }
 .orange {
   color: orange;
+}
+.blue {
+  color: blue;
 }
 
 .search-container {

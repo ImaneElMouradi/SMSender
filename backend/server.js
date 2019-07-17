@@ -14,7 +14,7 @@ const util = require("util");
 const logFile = fs.createWriteStream("log.txt", { flags: "a" });
 const logStdout = process.stdout;
 
-// overwrite console.log to save logs
+// overwrite console.log to save logs in log.txt and on console(default)
 console.log = e => {
   logFile.write(util.format(e) + "\n");
   logStdout.write(util.format(e) + "\n");
@@ -26,7 +26,10 @@ const sender = "itwins"; // you can add in the API /&shortcode=${sender}/
 
 const message = "test bulksms ma";
 
+// url used for tetsing purposes only
 const testUrl = "https://ennn27uyxhe2.x.pipedream.net/testSMS";
+
+// incoming webhook in order to send messages to slack channel (real time)
 const slackWebhook =
   "https://hooks.slack.com/services/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";
 
@@ -52,11 +55,14 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+// retry request 5 times before reject (err)
 const opts = {
   retries: 4
 };
 
 // functions
+
+// function to send SMS - uses bulksms.ma (mock for now) - 5 tries
 const postCallSMS = (res, phoneNum, id, first_name, last_name) => {
   request(
     {
@@ -85,6 +91,7 @@ const postCallSMS = (res, phoneNum, id, first_name, last_name) => {
 
 module.exports.postCallSMS = postCallSMS;
 
+// funciton to send a real time message to slack whenever an SMS fails
 const postSlack = (id, first_name, last_name, pb) => {
   var payload = {
     text:
@@ -111,25 +118,47 @@ const postSlack = (id, first_name, last_name, pb) => {
   });
 };
 
-// fucntion to store candidates depending on the pb (problem) encountered
+// function to store candidates depending on the problem encountered in mongodb database
 const saveCandidate = (pb, id, first_name, last_name, res) => {
   const date = new Date();
-  const candidate = new Candidate({
-    candidateId: id,
-    candidateFirstName: first_name,
-    candidateLastName: last_name,
-    problem: pb,
-    date:
-      date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
-  });
-  candidate.save((err, candidate) => {
-    if (err) return console.error(err);
-    postSlack(id, first_name, last_name, pb);
-    res.send(candidate.candidateId + " saved to the database : " + pb);
-  });
+
+  // checks if the candidateID already exists
+  Candidate.findOne({ candidateId: id })
+    .then(candidate => {
+      if (!candidate) {
+        const candidate = new Candidate({
+          candidateId: id,
+          candidateFirstName: first_name,
+          candidateLastName: last_name,
+          problem: pb,
+          date:
+            date.getDate() +
+            "-" +
+            (date.getMonth() + 1) +
+            "-" +
+            date.getFullYear()
+        });
+        candidate.save((err, candidate) => {
+          if (err) return console.error(err);
+          postSlack(id, first_name, last_name, pb);
+          res.send(candidate.candidateId + " saved to the database : " + pb);
+        });
+      } else {
+        // updating if candidate exists
+        candidate.problem = pb;
+        candidate.date = date;
+        res.send(
+          candidate.candidateId + " saved to the database (update) : " + pb
+        );
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send();
+    });
 };
 
-// endpoint
+// endpoint (of the 3rd party's webhook)
 app.post("/test", (req, res) => {
   //   console.log(req.body);
   //   res.status(200).send(req.body.payload.application.candidate);
@@ -151,11 +180,12 @@ app.post("/test", (req, res) => {
 
       // return res.send("send SMS to " + phoneNum);
     } else {
-      saveCandidate("No phone number", id, first_name, last_name, res);
+      saveCandidate("no phone number", id, first_name, last_name, res);
     }
   }
 });
 
+// api used by front-end app
 app.get("/api/candidates", (req, res) => {
   Candidate.find((err, candidates) => {
     if (err) consloe.log(err);

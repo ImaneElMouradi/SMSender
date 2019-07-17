@@ -42,9 +42,9 @@ class App extends Component {
   };
 
   getColor = e => {
-    if (e == "No phone number") {
+    if (e.match("no phone number")) {
       return "red";
-    } else if (e == "Wrong number") {
+    } else if (e === "Wrong number") {
       return "orange";
     } else {
       return "blue";
@@ -106,13 +106,7 @@ class App extends Component {
                     <td>{candidate.candidateFirstName}</td>
                     <td>{candidate.candidateLastName}</td>
                     <td>{candidate.date}</td>
-                    <td
-                      className={
-                        candidate.problem === "no phone number"
-                          ? "red"
-                          : "orange"
-                      }
-                    >
+                    <td className={this.getColor(candidate.problem)}>
                       {candidate.problem}
                     </td>
                     <td>
