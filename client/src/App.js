@@ -1,15 +1,21 @@
 import React, { Component } from "react";
 
+import united_remote_logo from "./images/united_remote_logo.png";
+import Candidates from "./components/Candidates";
+import Pagination from "./components/Pagination";
+
 class App extends Component {
   state = {
     candidates: [],
     isLoading: false,
-    search: ""
+    search: "",
+    currentPage: 1,
+    candidatesPerPage: 10
   };
 
   fetchApiCandidates = () => {
     this.setState({ isLoading: true });
-    fetch("http://localhost:3001/api/candidates")
+    fetch("/api/candidates")
       .then(response => response.json())
       .then(data => {
         this.setState({ candidates: [...data], isLoading: false });
@@ -24,7 +30,7 @@ class App extends Component {
   handleDelete = id => {
     // console.log(id);
     parseInt(id);
-    fetch("http://localhost:3001/api/delete/" + id, {
+    fetch("/api/delete/" + id, {
       method: "DELETE"
     })
       .then(response => {
@@ -41,18 +47,12 @@ class App extends Component {
     this.setState({ search: e.target.value });
   };
 
-  getColor = e => {
-    if (e.match("no phone number")) {
-      return "red";
-    } else if (e === "Wrong number") {
-      return "orange";
-    } else {
-      return "blue";
-    }
-  };
-
   handleRefresh = () => {
     this.fetchApiCandidates();
+  };
+
+  handlePagination = number => {
+    this.setState({ currentPage: number });
   };
 
   render() {
@@ -66,62 +66,61 @@ class App extends Component {
           .includes(this.state.search.toLowerCase())
       );
     });
+
+    // get current candidates
+    const indexOfLastCandidate =
+      this.state.currentPage * this.state.candidatesPerPage;
+    const indexOfFirstCandidate =
+      indexOfLastCandidate - this.state.candidatesPerPage;
+    const currentCandidates = filteredCandidates.slice(
+      indexOfFirstCandidate,
+      indexOfLastCandidate
+    );
+
     return (
       <div className="App">
-        <h4 className="navigation">Candidates who didn't receive an SMS</h4>
-        <div className="search-container">
+        <h4 className="navigation">
+          <a href="https://unitedremote.com/companies">
+            <img
+              src={united_remote_logo}
+              width="100"
+              height="45"
+              alt="United Remote Logo"
+              className="logo"
+            />
+          </a>
+          SMS Fails
+        </h4>
+        <div className="utility-container">
           <input
             type="text"
             value={this.state.search}
             onChange={this.handleSearch}
             placeholder="Search Name"
           />
+          <span onClick={this.handleRefresh} className="refresh">
+            <i className="fa fa-refresh fa-lg" />
+          </span>
         </div>
-
-        <button onClick={this.handleRefresh}>Refresh</button>
 
         {this.state.isLoading && (
           <div className="d-flex justify-content-center">
-            <div className="spinner-border text-danger" role="status">
+            <div className="spinner-border text-dark" role="status">
               <span className="sr-only">Loading...</span>
             </div>
           </div>
         )}
 
         {this.state.candidates && (
-          <div>
-            <table className="table table-borderless">
-              <thead className="">
-                <tr>
-                  <th scope="col">Id</th>
-                  <th scope="col">First Name</th>
-                  <th scope="col">Last Name</th>
-                  <th scopr="col">Date</th>
-                  <th scope="col">Problem</th>
-                  <th scope="col" />
-                </tr>
-              </thead>
-
-              <tbody>
-                {filteredCandidates.map(candidate => (
-                  <tr key={candidate._id}>
-                    <th>{candidate.candidateId}</th>
-                    <td>{candidate.candidateFirstName}</td>
-                    <td>{candidate.candidateLastName}</td>
-                    <td>{candidate.date}</td>
-                    <td className={this.getColor(candidate.problem)}>
-                      {candidate.problem}
-                    </td>
-                    <td>
-                      <span onClick={() => this.handleDelete(candidate._id)}>
-                        <i className="fa fa-trash trash" />
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <Candidates filteredCandidates={currentCandidates} />
+            <Pagination
+              candidatesPerPage={this.state.candidatesPerPage}
+              totalCandidates={filteredCandidates.length}
+              handlePagination={this.handlePagination}
+              currentPage={this.state.currentPage}
+            />
+          </>
         )}
       </div>
     );

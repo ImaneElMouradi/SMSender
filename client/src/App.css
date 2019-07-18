@@ -1,5 +1,6 @@
 .App {
   width: 80%;
+  margin-top: 0px !important;
   margin: auto;
   font-family: "Source Sans Pro", sans-serif;
 }
@@ -18,16 +19,36 @@
   cursor: pointer;
 }
 
-.red {
+.redCol {
   color: red;
 }
-.orange {
+.orangeCol {
   color: orange;
 }
-.blue {
+.blueCol {
   color: blue;
 }
 
-.search-container {
+.utility-container {
   float: right;
+  margin-bottom: 20px;
+}
+
+.logo {
+  margin-right: 20px;
+}
+
+.refresh {
+  cursor: pointer;
+  margin-left: 20px;
+  float: right;
+}
+
+.container-pg {
+  text-align: center !important;
+  margin: auto;
+}
+
+.pg {
+  display: inline-block;
 }
