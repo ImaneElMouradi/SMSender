@@ -23,8 +23,8 @@ export default function Pagination({
             }
           >
             <a
+              href="#!"
               onClick={() => handlePagination(number)}
-              href="!#"
               className="page-link"
             >
               {number}

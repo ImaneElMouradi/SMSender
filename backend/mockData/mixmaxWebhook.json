@@ -1,0 +1,26 @@
+{
+  "userId": "T3STUS3R1D",
+  "to": [
+    {
+      "email": "engtestuser3@mixmax.com",
+      "name": "Test User3"
+    }
+  ],
+  "cc": [],
+  "bcc": [],
+  "from": {
+    "email": "engtestuser2@mixmax.com",
+    "name": "Test User2"
+  },
+  "subject": "Please join me ",
+  "sent": 1481745125403,
+  "id": "16ac8cc837d1b304",
+  "threadId": "16008541212e8a32",
+  "rfc822Id": "<CAHfzPxo09WCKrtyPRM9g+60za4+0cHffwyT0vf867Pp=ehrfQ@mail.gmail.com>",
+  "receivedBy": {
+    "email": "engtestuser2@mixmax.com",
+    "name": "Test User2"
+  },
+  "plaintextBody": "Please join me for a meeting. \n--\nEngineering Test",
+  "eventName": "message:sent"
+}

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import united_remote_logo from "./images/united_remote_logo.png";
 import Candidates from "./components/Candidates";
 import Pagination from "./components/Pagination";
+import ModalDelete from "./components/ModalDelete";
 
 class App extends Component {
   state = {
@@ -10,7 +11,8 @@ class App extends Component {
     isLoading: false,
     search: "",
     currentPage: 1,
-    candidatesPerPage: 10
+    candidatesPerPage: 10,
+    isOpen: false
   };
 
   fetchApiCandidates = () => {
@@ -55,6 +57,10 @@ class App extends Component {
     this.setState({ currentPage: number });
   };
 
+  toggleModal = () => {
+    this.setState({ isOpen: !this.state.isOpen });
+  };
+
   render() {
     let filteredCandidates = this.state.candidates.filter(candidate => {
       return (
@@ -84,13 +90,32 @@ class App extends Component {
             <img
               src={united_remote_logo}
               width="100"
-              height="45"
+              height="50"
               alt="United Remote Logo"
               className="logo"
             />
           </a>
           SMS Fails
         </h4>
+
+        {/* <button onClick={this.toggleModal}>Open the modal</button>
+
+        <ModalDelete show={this.state.isOpen} onClose={this.toggleModal}>
+          <h3>Confirmation</h3> <br />
+          <p>
+            Do you really want to delete this record?
+            <span> This process cannot be undone.</span>
+          </p>
+          <br />
+        </ModalDelete> */}
+
+        {this.state.isLoading && (
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border text-dark" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        )}
         <div className="utility-container">
           <input
             type="text"
@@ -103,17 +128,12 @@ class App extends Component {
           </span>
         </div>
 
-        {this.state.isLoading && (
-          <div className="d-flex justify-content-center">
-            <div className="spinner-border text-dark" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
-          </div>
-        )}
-
-        {this.state.candidates && (
+        {filteredCandidates.length !== 0 && (
           <>
-            <Candidates filteredCandidates={currentCandidates} />
+            <Candidates
+              filteredCandidates={currentCandidates}
+              handleDelete={this.handleDelete}
+            />
             <Pagination
               candidatesPerPage={this.state.candidatesPerPage}
               totalCandidates={filteredCandidates.length}

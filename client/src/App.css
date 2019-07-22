@@ -52,3 +52,15 @@
 .pg {
   display: inline-block;
 }
+
+.candidateInfo .hides {
+  visibility: hidden;
+}
+
+.candidateInfo:hover .hides {
+  visibility: visible;
+}
+
+.pagination a {
+  cursor: pointer;
+}

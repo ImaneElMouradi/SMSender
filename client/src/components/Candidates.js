@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import "../App.css";
+
 class Candidates extends Component {
   getColor = e => {
     if (e.match("no phone number")) {
@@ -10,6 +12,9 @@ class Candidates extends Component {
       return "blueCol";
     }
   };
+
+  handleTrashDisplay = () => {};
+
   render() {
     return (
       <table className="table table-borderless table-striped ">
@@ -26,7 +31,7 @@ class Candidates extends Component {
 
         <tbody>
           {this.props.filteredCandidates.map(candidate => (
-            <tr key={candidate._id}>
+            <tr key={candidate._id} className="candidateInfo">
               <th>{candidate.candidateId}</th>
               <td>{candidate.candidateFirstName}</td>
               <td>{candidate.candidateLastName}</td>
@@ -35,8 +40,11 @@ class Candidates extends Component {
                 {candidate.problem}
               </td>
               <td>
-                <span onClick={() => this.handleDelete(candidate._id)}>
-                  <i className="fa fa-trash trash" />
+                <span
+                  onClick={() => this.props.handleDelete(candidate._id)}
+                  className="hides"
+                >
+                  <i className="fa fa-trash trash " />
                 </span>
               </td>
             </tr>

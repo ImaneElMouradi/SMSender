@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 let Candidates = new Schema({
   candidateId: {
-    type: Number
+    type: Number,
+    required: true
   },
   candidateFirstName: {
     type: String
@@ -15,7 +16,8 @@ let Candidates = new Schema({
     type: String
   },
   date: {
-    type: String
+    type: String,
+    default: Date.now
   }
   //   candidatePhoneNumber: {
   //     type: String
