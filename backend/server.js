@@ -21,9 +21,6 @@ const sender = "itwins"; // you can add in the API /&shortcode=${sender}/
 // normal API // https://bulksms.ma/developer/sms/send?token=${token}&tel=${phoneNum}&message=${message}
 const message = "test bulksms ma";
 
-// url used for testing purposes only
-const testUrl = "https://ennn27uyxhe2.x.pipedream.net/testSMS";
-
 const mongoose = require("mongoose");
 mongoose.connect(mongoURI, { useNewUrlParser: true }, err => {
   if (err) console.log(err);

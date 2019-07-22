@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const date = new Date();
+
 let Candidates = new Schema({
   candidateId: {
     type: Number,
@@ -17,7 +19,8 @@ let Candidates = new Schema({
   },
   date: {
     type: String,
-    default: Date.now
+    default:
+      date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
   }
   //   candidatePhoneNumber: {
   //     type: String

@@ -8,6 +8,10 @@ const saveCandidate = require("./saveCandidate");
 const opts = {
   retries: 4
 };
+
+// url used for testing purposes only
+const testUrl = "https://ent96e99nqgs.x.pipedream.net/testSMS";
+
 // function to send SMS - uses bulksms.ma (mock for now) - 5 tries
 const postCallSMS = (res, phoneNum, id, first_name, last_name) => {
   request(
@@ -35,4 +39,4 @@ const postCallSMS = (res, phoneNum, id, first_name, last_name) => {
   );
 };
 
-module.exports.postCallSMS = postCallSMS;
+module.exports = postCallSMS;

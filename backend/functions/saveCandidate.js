@@ -29,11 +29,27 @@ const saveCandidate = (pb, id, first_name, last_name, res) => {
         });
       } else {
         // updating if candidate exists
-        candidate.problem = pb;
-        candidate.date = date;
-        postSlack(id, first_name, last_name, pb);
-        res.send(
-          candidate.candidateId + " saved to the database (update) : " + pb
+        const date = new Date();
+        Candidate.findOneAndUpdate(
+          { candidateId: id },
+          {
+            problem: pb,
+            date:
+              date.getDate() +
+              "-" +
+              (date.getMonth() + 1) +
+              "-" +
+              date.getFullYear()
+          },
+          { upsert: true, useFindAndModify: false },
+          (err, doc) => {
+            if (err) return res.send(500, { error: err });
+            postSlack(id, first_name, last_name, pb);
+
+            return res.send(
+              candidate.candidateId + " saved to the database (update) : " + pb
+            );
+          }
         );
       }
     })
