@@ -22,6 +22,7 @@ const saveCandidate = (pb, id, first_name, last_name, res) => {
             "-" +
             date.getFullYear()
         });
+
         candidate.save((err, candidate) => {
           if (err) return console.error(err);
           postSlack(id, first_name, last_name, pb);
@@ -30,6 +31,7 @@ const saveCandidate = (pb, id, first_name, last_name, res) => {
       } else {
         // updating if candidate exists
         const date = new Date();
+
         Candidate.findOneAndUpdate(
           { candidateId: id },
           {

@@ -1,10 +1,3 @@
-const express = require("express");
-
-const router = express.Router();
-
-const saveCandidate = require("../../functions/saveCandidate");
-const postCallSMS = require("../../functions/postCallSMS");
-
 const request = require("retry-request", {
   request: require("request")
 }); // default we have 3 tries
@@ -14,10 +7,16 @@ const opts = {
   retries: 4
 };
 
-const recruiteeKey = require("../../config/keys").recruiteeKey;
+const saveCandidate = require("./saveCandidate");
+const postCallSMS = require("./postCallSMS");
 
-// endpoint for mixmax webhook
-router.post("/webhook/test", (req, res) => {
+const recruiteeKeyTest = require("../config/keys").recruiteeKeyTest;
+const recruiteeKeyProd = require("../config/keys").recruiteeKeyProd;
+
+const companyId_test = require("../config/keys").companyId_test;
+const companyId_prod = require("../config/keys").companyId_prod;
+
+const send_SMS = (message, req, res) => {
   // we get the candidate's email from mixmax webhook
   const candidateEmail = req.body.to[0].email;
   console.log(candidateEmail);
@@ -27,9 +26,9 @@ router.post("/webhook/test", (req, res) => {
   request(
     {
       headers: {
-        Authorization: recruiteeKey
+        Authorization: recruiteeKeyTest
       },
-      url: `https://api.recruitee.com/c/38130/search/new/quick?query=${candidateEmail}`,
+      url: `https://api.recruitee.com/c/${companyId_test}/search/new/quick?query=${candidateEmail}`,
       method: "GET",
       json: true
     },
@@ -44,11 +43,11 @@ router.post("/webhook/test", (req, res) => {
           `Received details about candidate whose email is ${candidateEmail}`
         );
         if (phones[0]) {
-          const phoneNum = phones[0]; // have to check if the number is valid (format etc)
+          const phoneNum = phones[0]; // have to check if the number is valid (format like 06- etc)
           if (phoneNum.length != 10 || phoneNum[0] != "0") {
             saveCandidate("Wrong number", id, first_name, last_name, res);
           } else {
-            postCallSMS(res, phoneNum, id, first_name, last_name);
+            postCallSMS(res, phoneNum, id, first_name, last_name, message);
           }
         } else {
           saveCandidate("no phone number", id, first_name, last_name, res);
@@ -60,6 +59,6 @@ router.post("/webhook/test", (req, res) => {
         );
     }
   );
-});
+};
 
-module.exports = router;
+module.exports = send_SMS;

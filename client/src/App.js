@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import united_remote_logo from "./images/united_remote_logo.png";
 import Candidates from "./components/Candidates";
 import Pagination from "./components/Pagination";
-import ModalDelete from "./components/ModalDelete";
+import Modal from "./components/Modal";
 
 class App extends Component {
   state = {
@@ -12,37 +12,40 @@ class App extends Component {
     search: "",
     currentPage: 1,
     candidatesPerPage: 10,
-    isOpen: false
+    isOpen: false,
+    candidateId: null
   };
 
-  fetchApiCandidates = () => {
-    this.setState({ isLoading: true });
-    fetch("/api/candidates")
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ candidates: [...data], isLoading: false });
-        // console.log(this.state.candidates);
-      });
+  fetchApiCandidates = async () => {
+    try {
+      this.setState({ isLoading: true });
+
+      const response = await fetch("/api/candidates");
+      const data = await response.json();
+
+      this.setState({ candidates: [...data] });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      this.setState({ isLoading: false });
+    }
   };
 
   componentDidMount() {
     this.fetchApiCandidates();
   }
 
-  handleDelete = id => {
-    // console.log(id);
-    parseInt(id);
-    fetch("/api/delete/" + id, {
-      method: "DELETE"
-    })
-      .then(response => {
-        response.json();
-        this.fetchApiCandidates();
-      })
-      .catch(err => {
-        console.log(err);
+  handleDelete = async () => {
+    try {
+      await fetch(`/api/candidates/delete/${this.state.candidateId}`, {
+        method: "DELETE"
       });
-    // window.location.reload();
+
+      this.toggleModal();
+      this.fetchApiCandidates();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   handleSearch = e => {
@@ -58,20 +61,24 @@ class App extends Component {
   };
 
   toggleModal = () => {
-    this.setState({ isOpen: !this.state.isOpen });
+    this.setState(({ isOpen }) => ({ isOpen: !isOpen }));
+  };
+
+  handleModal = id => () => {
+    this.toggleModal();
+    this.setState({ candidateId: id });
   };
 
   render() {
-    let filteredCandidates = this.state.candidates.filter(candidate => {
-      return (
+    const filteredCandidates = this.state.candidates.filter(
+      candidate =>
         candidate.candidateLastName
           .toLowerCase()
           .includes(this.state.search.toLowerCase()) ||
         candidate.candidateFirstName
           .toLowerCase()
           .includes(this.state.search.toLowerCase())
-      );
-    });
+    );
 
     // get current candidates
     const indexOfLastCandidate =
@@ -89,25 +96,26 @@ class App extends Component {
           <a href="https://unitedremote.com/companies">
             <img
               src={united_remote_logo}
-              width="100"
-              height="50"
+              width="50"
+              height="25"
               alt="United Remote Logo"
               className="logo"
             />
           </a>
-          SMS Fails
+          {"SMS Fails"}
         </h4>
 
-        {/* <button onClick={this.toggleModal}>Open the modal</button>
-
-        <ModalDelete show={this.state.isOpen} onClose={this.toggleModal}>
-          <h3>Confirmation</h3> <br />
-          <p>
-            Do you really want to delete this record?
-            <span> This process cannot be undone.</span>
-          </p>
-          <br />
-        </ModalDelete> */}
+        {this.state.isOpen && (
+          <Modal onClose={this.toggleModal} onConfirm={this.handleDelete}>
+            <h3>Confirmation</h3>
+            <br />
+            <p>
+              Do you really want to delete this record?
+              <span> This process cannot be undone.</span>
+            </p>
+            <br />
+          </Modal>
+        )}
 
         {this.state.isLoading && (
           <div className="d-flex justify-content-center">
@@ -128,11 +136,12 @@ class App extends Component {
           </span>
         </div>
 
-        {filteredCandidates.length !== 0 && (
+        {!!filteredCandidates.length && (
           <>
             <Candidates
               filteredCandidates={currentCandidates}
               handleDelete={this.handleDelete}
+              handleModal={this.handleModal}
             />
             <Pagination
               candidatesPerPage={this.state.candidatesPerPage}

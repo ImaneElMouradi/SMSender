@@ -9,16 +9,22 @@ const opts = {
   retries: 4
 };
 
-// url used for testing purposes only
-const testUrl = "https://ent96e99nqgs.x.pipedream.net/testSMS";
+const bulksmsToken = require("../config/keys").bulksmsToken;
+const sender = "itwins"; // you can add in the API /&shortcode=${sender}/
+
+// url for production: bulksms https://bulksms.ma/developer/sms/send?token=${bulksmsToken}&tel=${phoneNum}&message=${message}
+
+// url used for testing purposes only, will be replaced with bulksms url
+const testUrl = "https://enclxpzaktp8s.x.pipedream.net/SendSMS";
 
 // function to send SMS - uses bulksms.ma (mock for now) - 5 tries
-const postCallSMS = (res, phoneNum, id, first_name, last_name) => {
+const postCallSMS = (res, phoneNum, id, first_name, last_name, message) => {
   request(
     {
       url: testUrl,
       method: "POST",
-      json: true
+      json: true,
+      body: `Sms sent to ${first_name} ${last_name}: ${phoneNum}, MESSAGE:${message}`
       // maxAttempts: 5,
       // retryDelay: 5000,
       // retryStrategy: request.RetryStrategies.HTTPOrNetworkError // retry on errors 5xx and network errors

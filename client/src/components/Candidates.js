@@ -4,21 +4,19 @@ import "../App.css";
 
 class Candidates extends Component {
   getColor = e => {
-    if (e.match("no phone number")) {
-      return "redCol";
-    } else if (e === "Wrong number") {
-      return "orangeCol";
-    } else {
-      return "blueCol";
-    }
+    if (e.match("no phone number")) return "redCol";
+    if (e === "Wrong number") return "orangeCol";
+    return "blueCol";
   };
 
-  handleTrashDisplay = () => {};
+  handleDelete = candidateId => () => {
+    this.props.handleDelete(candidateId);
+  };
 
   render() {
     return (
-      <table className="table table-borderless table-striped ">
-        <thead className="">
+      <table className="table table-borderless table-striped">
+        <thead>
           <tr>
             <th scope="col">Id</th>
             <th scope="col">First Name</th>
@@ -41,7 +39,7 @@ class Candidates extends Component {
               </td>
               <td>
                 <span
-                  onClick={() => this.props.handleDelete(candidate._id)}
+                  onClick={this.props.handleModal(candidate._id)}
                   className="hides"
                 >
                   <i className="fa fa-trash trash " />

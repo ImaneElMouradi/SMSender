@@ -8,10 +8,10 @@
 .navigation {
   text-align: center;
   margin-bottom: 40px;
-  padding: 20px;
+  padding: 10px;
   background: #7c70db;
   color: #fff;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .trash {
@@ -30,8 +30,21 @@
 }
 
 .utility-container {
-  float: right;
+  display: flex;
+  justify-content: center;
   margin-bottom: 20px;
+}
+
+.utility-container input {
+  border-radius: 4px;
+  padding: 4px;
+  border: 1px solid #dae1e7;
+}
+
+.utility-container input:focus {
+  border-radius: 4px !important;
+  padding: 4px !important;
+  border: 1px solid #dae1e7 !important;
 }
 
 .logo {
