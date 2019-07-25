@@ -39,6 +39,11 @@ app.use("/", routerWebhook);
 const routerApi = require("./routes/api/candidates");
 app.use("/", routerApi);
 
+// serve up static assets
+if (process.send.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
